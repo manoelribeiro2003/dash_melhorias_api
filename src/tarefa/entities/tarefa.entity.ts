@@ -10,10 +10,10 @@ export class Tarefa {
     nome!: string;
 
     @Column({ type: 'boolean' })
-    concluido?: boolean;
+    concluido!: boolean;
 
-    @ManyToOne(() => Projeto, projeto => projeto.tarefas)
-    @JoinColumn({ name: 'projetos' })
+    @ManyToOne(() => Projeto, projeto => projeto.tarefas, { nullable: false })
+    @JoinColumn({ name: 'projeto' })
     projeto!: Projeto;
 
     @CreateDateColumn()

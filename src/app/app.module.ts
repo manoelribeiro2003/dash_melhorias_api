@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from 'src/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BranchModule } from 'src/branch/branch.module';
+import { ProjetoModule } from 'src/projeto/projeto.module';
+import { TarefaModule } from 'src/tarefa/tarefa.module';
+import { UsuarioModule } from 'src/usuario/usuario.module';
 
 @Module({
   imports: [
@@ -23,8 +25,10 @@ import { BranchModule } from 'src/branch/branch.module';
       autoLoadEntities: true,
       synchronize: true, //Sincroniza com o BD. Não deve ser usado em produção
     }),
-    UsersModule,
     BranchModule,
+    ProjetoModule,
+    TarefaModule,
+    UsuarioModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -32,7 +32,6 @@ export class Projeto {
     atrasado?: boolean;
 
     @OneToMany(() => Tarefa, tarefa => tarefa.projeto)
-    @JoinColumn({ name: 'tarefas' })
     tarefas?: Tarefa[]
 
     @ManyToOne(() => Usuario, usuario => usuario.projetos)

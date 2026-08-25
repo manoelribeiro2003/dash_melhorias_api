@@ -1,4 +1,6 @@
-import { IsInt, IsNotEmpty, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
+import { CreateTarefaDto } from "src/tarefa/dto/create-tarefa.dto";
 
 export class CreateProjetoDto {
     @IsString()
@@ -8,4 +10,10 @@ export class CreateProjetoDto {
     @IsInt()
     @IsNotEmpty()
     readonly criadoPorId!: number
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateTarefaDto)
+    readonly tarefas?: CreateTarefaDto[];
 }
