@@ -16,7 +16,7 @@ export class Tarefa {
     concluido!: boolean;
 
     @ManyToOne(() => Projeto, projeto => projeto.tarefas, { nullable: false })
-    @JoinColumn({ name: 'projeto' })
+    @JoinColumn({ name: 'projeto_id' })
     projeto!: Projeto;
 
     @CreateDateColumn()

@@ -5,44 +5,40 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 @Entity('projetos')
 export class Projeto {
     @PrimaryGeneratedColumn()
-    id!: number;
+    id!: number; //ok
 
     @Column({ type: 'varchar', length: 100, nullable: false })
-    nome!: string;
+    nome!: string; // ok
 
     @Column({ type: 'varchar' })
-    categoria?: string;
+    categoria?: string; //ok
 
     @Column({ type: 'varchar', default: 'Não iniciado' })
-    status?: string;
+    status?: string; //ok
 
-    @Column({ type: 'date', })
-    dataInicio?: Date
+    @Column({ type: 'date', nullable: true, name: 'data_inicio'})
+    dataInicio?: Date //ok
 
-    @Column({ type: 'date' })
-    dataTermino?: Date
-
-    @Column({ type: 'varchar' })
-    orcamento?: string
+    @Column({ type: 'date', nullable: true, name: 'data_termino'})
+    dataTermino?: Date // ok
 
     @Column({ type: 'varchar' })
-    prioridade?: string
+    orcamento?: string //ok 
 
-    @Column({ type: 'boolean', default: false })
-    atrasado?: boolean;
-
-    @OneToMany(() => Tarefa, tarefa => tarefa.projeto)
-    tarefas?: Tarefa[]
+    @Column({ type: 'boolean' })
+    prioridade?: boolean //ok
 
     @ManyToOne(() => Usuario, usuario => usuario.projetos)
-    @JoinColumn({ name: 'criadoPor' })
-    criadoPor!: Usuario;
+    @JoinColumn({ name: 'criado_por_id' })
+    criadoPor!: Usuario; //ok
 
-    @CreateDateColumn()
-    createdAt!: Date;
+    @OneToMany(() => Tarefa, tarefa => tarefa.projeto)
+    tarefas?: Tarefa[] //ok
 
-    @UpdateDateColumn()
-    updatedAt!: Date;
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt!: Date; // ok (dados do banco)
 
+    @UpdateDateColumn({ name: 'updated_at' })
+    updatedAt!: Date; // ok (dados do banco)
 
 }

@@ -21,7 +21,7 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
     // }),
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: 'database.sqlite',
+      database: 'melhorias.sqlite',
       autoLoadEntities: true,
       synchronize: true, //Sincroniza com o BD. Não deve ser usado em produção
     }),
