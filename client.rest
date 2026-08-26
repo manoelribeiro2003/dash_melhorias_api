@@ -41,7 +41,7 @@ Content-Type: application/json
 
 {
     "nome": "10000 PROJETO COM NOME ATUALIZADO",
-    "orcamento": "5555555,00",
+    "orcamento": "555,00",
     "tarefas": [
         {
             "id": 323,

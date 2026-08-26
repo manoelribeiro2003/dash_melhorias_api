@@ -83,12 +83,10 @@ export class ProjetoService {
         dataTermino: true,
         orcamento: true,
         prioridade: true,
-        criadoPor: {
-          nome: true
-        },
-        tarefas: {
-          nome: true,
-        },
+        criadoPor: true,
+        tarefas: true,
+        createdAt: true,
+        updatedAt: true
       }
     });
   }
