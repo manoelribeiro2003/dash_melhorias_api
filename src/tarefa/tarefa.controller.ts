@@ -25,13 +25,13 @@ export class TarefaController {
     return this.tarefaService.findOne(id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number, 
-    @Body() updateTarefaDto: UpdateTarefaDto
-  ) {
-    return this.tarefaService.update(id, updateTarefaDto);
-  }
+  // @Patch(':id')
+  // update(
+  //   @Param('id', ParseIntPipe) id: number, 
+  //   @Body() updateTarefaDto: UpdateTarefaDto
+  // ) {
+  //   return this.tarefaService.updateMany(id, updateTarefaDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {

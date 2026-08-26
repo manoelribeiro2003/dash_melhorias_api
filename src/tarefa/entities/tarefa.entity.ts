@@ -9,13 +9,13 @@ export class Tarefa {
     @Column({ type: 'varchar', nullable: false })
     nome!: string;
     
-    @Column({ type: 'integer', nullable: false })
+    @Column({ type: 'integer'})
     ordem!: number;
 
-    @Column({ type: 'boolean' })
+    @Column({ type: 'boolean', default: false})
     concluido!: boolean;
 
-    @ManyToOne(() => Projeto, projeto => projeto.tarefas, { nullable: false })
+    @ManyToOne(() => Projeto, projeto => projeto.tarefas, { nullable: false, onDelete: 'CASCADE'})
     @JoinColumn({ name: 'projeto_id' })
     projeto!: Projeto;
 

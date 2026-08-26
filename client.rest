@@ -1,51 +1,62 @@
 @baseUrl = http://localhost:3000
 
-# RECADOS
+### Lista todos os projetos
+GET {{baseUrl}}/projetos/
+### Lista apenas um projeto
+GET {{baseUrl}}/projetos/156/
+### Cria um projeto
+POST {{baseUrl}}/projetos/
+Content-Type: application/json
+
+{
+    "nome": "Projeto para ser atualizado"
+    ,"criadoPorId": 11
+    ,"categoria": "RPA"
+    ,"dataInicio": "2026-12-31"
+    ,"dataTermino": "2027-12-31"
+    ,"dataTermino": "2027-12-31"
+    ,"orcamento": "1000,00"
+    ,"prioridade": true
+    ,"tarefas": [
+        {
+            "ordem": 1,
+            "nome": "1 Tarefa de projeto de prioridade",
+            "concluido": false
+        },
+        {
+            "ordem": 2,
+            "nome": "2 Tarefa de projeto de prioridade",
+            "concluido": true
+        },
+        {
+            "ordem": 3,
+            "nome": "3 Tarefa de projeto de prioridade",
+            "concluido": false
+        }
+    ]
+}
+### Atualiza um projeto
+PATCH {{baseUrl}}/projetos/156
+Content-Type: application/json
+
+{
+    "nome": "10000 PROJETO COM NOME ATUALIZADO",
+    "orcamento": "5555555,00",
+    "tarefas": [
+        {
+            "id": 323,
+            "nome": "NOVA Tarefa de projeto de prioridade",
+            "ordem": 2
+        }
+    ]
+}
+### Apaga um projeto
+DELETE {{baseUrl}}/projetos/155
+
+
+
+
+
+# --------------------------------------------------------------------------
 ### Lista todos os usuarios
-GET {{baseUrl}}/users/
-### Lista apenas um usuario
-GET {{baseUrl}}/users/1/
-### Cria um usuario
-POST {{baseUrl}}/users/
-Content-Type: application/json
-
-{
-    "nome": "Ana Souza",
-    "fabrica": "Fábrica 1",
-    "filial": "Farroupilha",
-    "mail": "ana.souza@email.com"
-}
-### Atualiza um usuario
-PATCH {{baseUrl}}/users/2
-Content-Type: application/json
-
-{
-    "admin": true
-}
-### Apaga um usuario
-DELETE {{baseUrl}}/users/5/
-
-
-
-
-# Filiais
-### Lista todas filiais
-GET {{baseUrl}}/branch/
-### Lista apenas uma filial
-GET {{baseUrl}}/branch/3/
-### Cria uma filial
-POST {{baseUrl}}/branch/
-Content-Type: application/json
-
-{
-    "name": "Farroupilha"
-}
-### Atualiza uma filial
-PATCH {{baseUrl}}/branch/8
-Content-Type: application/json
-
-{
-    "name": "Sobral"
-}
-### Apaga uma filial
-DELETE {{baseUrl}}/branch/9
+GET {{baseUrl}}/usuarios/

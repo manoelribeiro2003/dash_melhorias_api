@@ -2,10 +2,10 @@ import { ConflictException, Injectable, NotFoundException } from '@nestjs/common
 import { CreateProjetoDto } from './dto/create-projeto.dto';
 import { UpdateProjetoDto } from './dto/update-projeto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Projeto } from './entities/projeto.entity';
 import { Repository } from 'typeorm';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { TarefaService } from 'src/tarefa/tarefa.service';
+import { Projeto } from './entities/projeto.entity';
 
 @Injectable()
 export class ProjetoService {
@@ -25,17 +25,28 @@ export class ProjetoService {
   }
 
   async create(createProjetoDto: CreateProjetoDto): Promise<Projeto> {
+    const {
+      criadoPorId,
+      tarefas,
+      ...dadosProjeto
+    } = createProjetoDto;
 
-    const usuario = await this.usuarioRepository.findOneBy({ id: createProjetoDto.criadoPorId })
+    const usuario = await this.usuarioRepository.findOneBy({
+      id: criadoPorId
+    })
 
     if (!usuario) { this.throwNotFoundException('Usuário não encontrado') }
 
-    const projeto = this.projetoRepository.create({
-      nome: createProjetoDto.nome,
-      criadoPor: usuario
+
+    const projetoCriado = this.projetoRepository.create({
+      criadoPor: {
+        id: criadoPorId
+      },
+      tarefas: tarefas,
+      ...dadosProjeto
     })
 
-    const projetoSalvo = await this.projetoRepository.save(projeto)
+    const projetoSalvo = await this.projetoRepository.save(projetoCriado)
 
     if (createProjetoDto.tarefas?.length) {
       await this.tarefaService.createMany(
@@ -43,17 +54,49 @@ export class ProjetoService {
       )
     }
 
-    return projetoSalvo;
+    const projetoRetornado = await this.projetoRepository.findOneOrFail({
+      relations: {
+        criadoPor: true,
+        tarefas: true
+      },
+      where: {
+        id: projetoSalvo.id
+      }
+    })
+
+    return projetoRetornado;
 
   }
 
   async findAll(): Promise<Projeto[]> {
-    return await this.projetoRepository.find()
+    return this.projetoRepository.find({
+      relations: {
+        criadoPor: true,
+        tarefas: true
+      },
+      select: {
+        id: true,
+        nome: true,
+        categoria: true,
+        status: true,
+        dataInicio: true,
+        dataTermino: true,
+        orcamento: true,
+        prioridade: true,
+        criadoPor: {
+          nome: true
+        },
+        tarefas: {
+          nome: true,
+        },
+      }
+    });
   }
 
   async findOne(id: number): Promise<Projeto> {
-    const projeto = await this.projetoRepository.findOneBy({
-      id: id
+    const projeto = await this.projetoRepository.findOne({
+      relations: { criadoPor: true, tarefas: true },
+      where: { id: id },
     })
 
     if (!projeto) { this.throwNotFoundException() }
@@ -63,12 +106,24 @@ export class ProjetoService {
 
   async update(id: number, updateProjetoDto: UpdateProjetoDto) {
 
+    const {
+      tarefas = updateProjetoDto.tarefas,
+      ...dadosProjeto
+    } = updateProjetoDto
+
     const updatedProjeto = await this.projetoRepository.preload({
       id: id,
-      ...updateProjetoDto
+      ...dadosProjeto
     })
 
     if (!updatedProjeto) { this.throwNotFoundException() }
+
+    if (tarefas?.length) {
+      await this.tarefaService.updateMany(
+        id, tarefas
+      )
+    }
+
 
     return await this.projetoRepository.save(updatedProjeto)
   }

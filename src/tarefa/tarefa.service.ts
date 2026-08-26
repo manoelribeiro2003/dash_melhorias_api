@@ -23,13 +23,16 @@ export class TarefaService {
   }
 
   async createMany(projetoId: number, createTarefaDto: CreateTarefaDto[]): Promise<Tarefa[]> {
-    const projeto = await this.projetoRepository.findOneBy({id: projetoId})
 
-    if(!projeto){this.throwNotFoundException('Projeto nao encontrado')}
+    const projeto = await this.projetoRepository.findOneBy({ id: projetoId })
+
+    if (!projeto) { this.throwNotFoundException('Projeto nao encontrado') }
 
     const tarefas = createTarefaDto.map(tarefa => (
       this.tarefaRepository.create({
-        nome:tarefa.nome,
+        ...tarefa,
+        nome: tarefa.nome,
+        ordem: tarefa.ordem,
         projeto: projeto
       })
     ))
@@ -50,15 +53,38 @@ export class TarefaService {
     return tarefa;
   }
 
-  async update(id: number, updateTarefaDto: UpdateTarefaDto): Promise<Tarefa> {
-    const tarefa = await this.tarefaRepository.preload({
-      id: id,
-      ...updateTarefaDto
-    })
+  async updateMany(projetoId: number, tarefasDto: UpdateTarefaDto[]): Promise<Tarefa[]> {
 
-    if (!tarefa) { this.throwNotFoundException() }
+    const tarefasBanco = await this.tarefaRepository.find({
+      where: {
+        projeto: {
+          id: projetoId,
+        },
+      },
+    });
 
-    return await this.tarefaRepository.save(tarefa)
+    const idsPayload = tarefasDto
+      .filter(t => t.id !== undefined)
+      .map(t => t.id!);
+
+    const tarefasParaRemover = tarefasBanco.filter(
+      t => !idsPayload.includes(t.id),
+    );
+
+    if (tarefasParaRemover.length) {
+      await this.tarefaRepository.remove(tarefasParaRemover);
+    }
+
+    const tarefas = tarefasDto.map(tarefa =>
+      this.tarefaRepository.create({
+        ...tarefa,
+        projeto: {
+          id: projetoId,
+        },
+      }),
+    );
+
+    return await this.tarefaRepository.save(tarefas);
   }
 
   async remove(id: number): Promise<Tarefa> {

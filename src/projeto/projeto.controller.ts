@@ -3,7 +3,7 @@ import { ProjetoService } from './projeto.service';
 import { CreateProjetoDto } from './dto/create-projeto.dto';
 import { UpdateProjetoDto } from './dto/update-projeto.dto';
 
-@Controller('projeto')
+@Controller('projetos')
 export class ProjetoController {
   constructor(private readonly projetoService: ProjetoService) {}
 

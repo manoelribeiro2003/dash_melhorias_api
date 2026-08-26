@@ -10,7 +10,7 @@ export class Projeto {
     @Column({ type: 'varchar', length: 100, nullable: false })
     nome!: string; // ok
 
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar', nullable: true })
     categoria?: string; //ok
 
     @Column({ type: 'varchar', default: 'Não iniciado' })
@@ -22,10 +22,10 @@ export class Projeto {
     @Column({ type: 'date', nullable: true, name: 'data_termino'})
     dataTermino?: Date // ok
 
-    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar' , nullable: true})
     orcamento?: string //ok 
 
-    @Column({ type: 'boolean' })
+    @Column({ type: 'boolean', default: false})
     prioridade?: boolean //ok
 
     @ManyToOne(() => Usuario, usuario => usuario.projetos)

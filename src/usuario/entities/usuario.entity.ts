@@ -1,5 +1,6 @@
+
 import { Projeto } from "src/projeto/entities/projeto.entity";
-import { Column, Entity, JoinColumn, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('usuarios')
 export class Usuario {
