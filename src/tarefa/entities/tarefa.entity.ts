@@ -8,6 +8,9 @@ export class Tarefa {
 
     @Column({ type: 'varchar', nullable: false })
     nome!: string;
+    
+    @Column({ type: 'integer', nullable: false })
+    ordem!: number;
 
     @Column({ type: 'boolean' })
     concluido!: boolean;
