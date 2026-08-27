@@ -108,40 +108,27 @@ export class ProjetoService {
     return projeto
   }
 
-  // async update(id: number, updateProjetoDto: UpdateProjetoDto) {
-
-  //   const {
-  //     tarefas = updateProjetoDto.tarefas,
-  //     ...dadosProjeto
-  //   } = updateProjetoDto
-
-  //   const updatedProjeto = await this.projetoRepository.preload({
-  //     id: id,
-  //     ...dadosProjeto
-  //   })
-
-  //   if (!updatedProjeto) { this.throwNotFoundException() }
-
-  //   if (tarefas?.length) {
-  //     await this.tarefaService.updateMany(
-  //       id, tarefas
-  //     )
-  //   }
-
-
-  //   return await this.projetoRepository.save(updatedProjeto)
-  // }
-
   async update(id: number, updateProjetoDto: UpdateProjetoDto) {
-
     const {
       tarefas = updateProjetoDto.tarefas,
+      criadoPorId,
       ...dadosProjeto
     } = updateProjetoDto;
 
+    const usuario = await this.usuarioRepository.findOne({
+      where: {
+        id: criadoPorId
+      }
+    });
+
+    if (!usuario) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
     const updatedProjeto = await this.projetoRepository.preload({
       id,
-      ...dadosProjeto
+      ...dadosProjeto,
+      criadoPor: usuario
     });
 
     if (!updatedProjeto) {
@@ -152,7 +139,9 @@ export class ProjetoService {
       await this.tarefaService.updateMany(id, tarefas);
     }
 
-    await this.projetoRepository.save(updatedProjeto);
+    const projetoSalvo = await this.projetoRepository.save(updatedProjeto);
+
+    console.log('projeto salvo:', projetoSalvo)
 
     return await this.projetoRepository.findOne({
       where: {
@@ -162,7 +151,6 @@ export class ProjetoService {
         criadoPor: true,
         tarefas: true
       },
-
       select: {
         id: true,
         nome: true,
