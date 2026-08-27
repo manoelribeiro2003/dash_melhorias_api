@@ -87,6 +87,12 @@ export class ProjetoService {
         tarefas: true,
         createdAt: true,
         updatedAt: true
+      },
+      order: {
+        id: 'ASC',
+        tarefas: {
+          ordem: 'ASC'
+        }
       }
     });
   }
@@ -102,28 +108,81 @@ export class ProjetoService {
     return projeto
   }
 
+  // async update(id: number, updateProjetoDto: UpdateProjetoDto) {
+
+  //   const {
+  //     tarefas = updateProjetoDto.tarefas,
+  //     ...dadosProjeto
+  //   } = updateProjetoDto
+
+  //   const updatedProjeto = await this.projetoRepository.preload({
+  //     id: id,
+  //     ...dadosProjeto
+  //   })
+
+  //   if (!updatedProjeto) { this.throwNotFoundException() }
+
+  //   if (tarefas?.length) {
+  //     await this.tarefaService.updateMany(
+  //       id, tarefas
+  //     )
+  //   }
+
+
+  //   return await this.projetoRepository.save(updatedProjeto)
+  // }
+
   async update(id: number, updateProjetoDto: UpdateProjetoDto) {
 
     const {
       tarefas = updateProjetoDto.tarefas,
       ...dadosProjeto
-    } = updateProjetoDto
+    } = updateProjetoDto;
 
     const updatedProjeto = await this.projetoRepository.preload({
-      id: id,
+      id,
       ...dadosProjeto
-    })
+    });
 
-    if (!updatedProjeto) { this.throwNotFoundException() }
-
-    if (tarefas?.length) {
-      await this.tarefaService.updateMany(
-        id, tarefas
-      )
+    if (!updatedProjeto) {
+      this.throwNotFoundException();
     }
 
+    if (tarefas?.length) {
+      await this.tarefaService.updateMany(id, tarefas);
+    }
 
-    return await this.projetoRepository.save(updatedProjeto)
+    await this.projetoRepository.save(updatedProjeto);
+
+    return await this.projetoRepository.findOne({
+      where: {
+        id
+      },
+      relations: {
+        criadoPor: true,
+        tarefas: true
+      },
+
+      select: {
+        id: true,
+        nome: true,
+        categoria: true,
+        status: true,
+        dataInicio: true,
+        dataTermino: true,
+        orcamento: true,
+        prioridade: true,
+        criadoPor: true,
+        tarefas: true,
+        createdAt: true,
+        updatedAt: true
+      },
+      order: {
+        tarefas: {
+          ordem: 'ASC'
+        }
+      }
+    });
   }
 
   async remove(id: number): Promise<Projeto> {
