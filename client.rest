@@ -51,7 +51,7 @@ Content-Type: application/json
     ]
 }
 ### Apaga um projeto
-DELETE {{baseUrl}}/projetos/155
+DELETE {{baseUrl}}/projetos/146
 
 
 

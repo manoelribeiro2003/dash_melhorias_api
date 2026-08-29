@@ -141,8 +141,6 @@ export class ProjetoService {
 
     const projetoSalvo = await this.projetoRepository.save(updatedProjeto);
 
-    console.log('projeto salvo:', projetoSalvo)
-
     return await this.projetoRepository.findOne({
       where: {
         id
@@ -174,10 +172,21 @@ export class ProjetoService {
   }
 
   async remove(id: number): Promise<Projeto> {
-    const existingProjeto = await this.findOne(id)
 
-    await this.projetoRepository.remove(existingProjeto)
+    let projeto = await this.projetoRepository.findOneBy({ id });
 
-    return existingProjeto;
+    if (!projeto) {
+      this.throwNotFoundException();
+    }
+
+    const projetoExcluido = await this.projetoRepository.remove(projeto)
+
+    projeto = {
+      ...projetoExcluido,
+      id: id,
+    };
+    
+
+    return projeto;
   }
 }
