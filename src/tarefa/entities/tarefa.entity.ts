@@ -8,14 +8,20 @@ export class Tarefa {
 
     @Column({ type: 'varchar', nullable: false })
     nome!: string;
-    
-    @Column({ type: 'integer'})
+
+    @Column({ type: 'integer' })
     ordem!: number;
 
-    @Column({ type: 'boolean', default: false})
+    @Column({ type: 'date', nullable: true, name: 'data_inicio' })
+    dataInicio?: Date //ok
+
+    @Column({ type: 'date', nullable: true, name: 'data_termino' })
+    dataTermino?: Date // ok
+
+    @Column({ type: 'boolean', default: false })
     concluido!: boolean;
 
-    @ManyToOne(() => Projeto, projeto => projeto.tarefas, { nullable: false, onDelete: 'CASCADE'})
+    @ManyToOne(() => Projeto, projeto => projeto.tarefas, { nullable: false, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'projeto_id' })
     projeto!: Projeto;
 
