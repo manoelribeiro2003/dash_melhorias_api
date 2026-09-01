@@ -33,7 +33,9 @@ export class TarefaService {
         ...tarefa,
         nome: tarefa.nome,
         ordem: tarefa.ordem,
-        projeto: projeto
+        projeto: projeto,
+        dataInicio: tarefa.dataInicio,
+        dataTermino: tarefa.dataTermino,
       })
     ))
 

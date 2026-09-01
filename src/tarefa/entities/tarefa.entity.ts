@@ -13,10 +13,10 @@ export class Tarefa {
     ordem!: number;
 
     @Column({ type: 'date', nullable: true, name: 'data_inicio' })
-    dataInicio?: Date //ok
+    dataInicio!: Date //ok
 
     @Column({ type: 'date', nullable: true, name: 'data_termino' })
-    dataTermino?: Date // ok
+    dataTermino!: Date // ok
 
     @Column({ type: 'boolean', default: false })
     concluido!: boolean;
