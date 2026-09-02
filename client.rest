@@ -3,7 +3,7 @@
 ### Lista todos os projetos
 GET {{baseUrl}}/projetos/
 ### Lista apenas um projeto
-GET {{baseUrl}}/projetos/163
+GET {{baseUrl}}/projetos/25
 ### Cria um projeto
 POST {{baseUrl}}/projetos/
 Content-Type: application/json
@@ -60,3 +60,12 @@ DELETE {{baseUrl}}/projetos/146
 # --------------------------------------------------------------------------
 ### Lista todos os usuarios
 GET {{baseUrl}}/usuarios/
+
+### Cria um usuario
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+    "nome": "Daniel Viana de Carvalho",
+    "email": "daniel.carvalho@grendene.com.br"
+}
