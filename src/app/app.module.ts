@@ -23,7 +23,7 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
       type: 'better-sqlite3',
       database: 'melhorias.sqlite',
       autoLoadEntities: true,
-      synchronize: true, //Sincroniza com o BD. Não deve ser usado em produção
+      synchronize: false, //Sincroniza com o BD. Não deve ser usado em produção
     }),
     BranchModule,
     ProjetoModule,
