@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "nome": "Projeto para ser atualizado"
-    ,"criadoPorId": 11
+    ,"criadoPorId": 1
     ,"categoria": "RPA"
     ,"dataInicio": "2026-12-31"
     ,"dataTermino": "2027-12-31"

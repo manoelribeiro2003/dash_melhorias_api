@@ -9,22 +9,22 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
 
 @Module({
   imports: [
-    // TypeOrmModule.forRoot({
-    //   type: 'postgres',
-    //   host: 'localhost',
-    //   port: 5432,
-    //   username: 'postgres',
-    //   database: 'postgres',
-    //   password: '12345678',
-    //   autoLoadEntities: true,
-    //   synchronize: true //Sincroniza com o BD. Não deve ser usado em produção
-    // }),
     TypeOrmModule.forRoot({
-      type: 'better-sqlite3',
-      database: 'melhorias.sqlite',
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      database: 'dash_melhorias',
+      password: '12345678',
       autoLoadEntities: true,
-      synchronize: false, //Sincroniza com o BD. Não deve ser usado em produção
+      synchronize: false //Sincroniza com o BD. Não deve ser usado em produção
     }),
+    // TypeOrmModule.forRoot({
+    //   type: 'better-sqlite3',
+    //   database: 'melhorias.sqlite',
+    //   autoLoadEntities: true,
+    //   synchronize: false, //Sincroniza com o BD. Não deve ser usado em produção
+    // }),
     BranchModule,
     ProjetoModule,
     TarefaModule,
