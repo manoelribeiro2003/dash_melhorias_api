@@ -1,4 +1,4 @@
-import { Projeto } from "src/projeto/entities/projeto.entity";
+import { Projeto } from "../../projeto/entities/projeto.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('tarefas')

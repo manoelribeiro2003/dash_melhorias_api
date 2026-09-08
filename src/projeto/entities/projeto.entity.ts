@@ -1,5 +1,5 @@
-import { Tarefa } from "src/tarefa/entities/tarefa.entity";
-import { Usuario } from "src/usuario/entities/usuario.entity";
+import { Tarefa } from "../../tarefa/entities/tarefa.entity";
+import { Usuario } from "../../usuario/entities/usuario.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('projetos')

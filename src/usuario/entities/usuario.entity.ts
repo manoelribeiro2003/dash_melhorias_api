@@ -1,20 +1,34 @@
-
-import { Projeto } from "src/projeto/entities/projeto.entity";
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Projeto } from '../../projeto/entities/projeto.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('usuarios')
 export class Usuario {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column({ type: 'varchar', length: 100 })
-    nome!: string;
+  @Column({ type: 'varchar', length: 100 })
+  nome!: string;
 
-    @Column({ type: 'varchar', length: 100, unique: true })
-    email!: string;
+  @Column({ type: 'varchar', length: 100, unique: true })
+  email!: string;
 
-    @OneToMany(() => Projeto, projeto => projeto.criadoPor)
-    @JoinColumn({ name: 'projetos' })
-    projetos?: Projeto[]
+  @OneToMany(() => Projeto, (projeto) => projeto.criadoPor)
+  @JoinColumn({ name: 'projetos' })
+  projetos?: Projeto[];
 
+  @ManyToOne(() => Usuario, (usuario) => usuario.subordinados, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'gestor_id' })
+  gestor?: Usuario | null;
+
+  @OneToMany(() => Usuario, (usuario) => usuario.gestor)
+  subordinados?: Usuario[];
 }

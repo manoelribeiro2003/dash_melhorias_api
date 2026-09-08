@@ -139,7 +139,7 @@ export class ProjetoService {
       await this.tarefaService.updateMany(id, tarefas);
     }
 
-    const projetoSalvo = await this.projetoRepository.save(updatedProjeto);
+    await this.projetoRepository.save(updatedProjeto);
 
     return await this.projetoRepository.findOne({
       where: {

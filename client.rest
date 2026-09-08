@@ -1,10 +1,12 @@
 @baseUrl = http://localhost:3000
 
-### Lista todos os projetos
+### Listar todos os projetos
 GET {{baseUrl}}/projetos/
-### Lista apenas um projeto
+
+### Listar apenas um projeto
 GET {{baseUrl}}/projetos/25
-### Cria um projeto
+
+### Criar um projeto
 POST {{baseUrl}}/projetos/
 Content-Type: application/json
 
@@ -35,7 +37,7 @@ Content-Type: application/json
         }
     ]
 }
-### Atualiza um projeto
+### Atualizar um projeto
 PATCH {{baseUrl}}/projetos/156
 Content-Type: application/json
 
@@ -50,7 +52,7 @@ Content-Type: application/json
         }
     ]
 }
-### Apaga um projeto
+### Apagar um projeto
 DELETE {{baseUrl}}/projetos/146
 
 
@@ -58,14 +60,29 @@ DELETE {{baseUrl}}/projetos/146
 
 
 # --------------------------------------------------------------------------
-### Lista todos os usuarios
+### Listar todos os usuarios
 GET {{baseUrl}}/usuarios/
 
-### Cria um usuario
+### Listar um usuario
+GET {{baseUrl}}/usuarios/3
+
+### Criar um usuario
 POST {{baseUrl}}/usuarios/
 Content-Type: application/json
 
 {
-    "nome": "Daniel Viana de Carvalho",
-    "email": "daniel.carvalho@grendene.com.br"
+    "nome": "Thiago Roberto Andrade Aguiar",
+    "email": "roberto.aguiar@grendene.com.br",
+    "gestorId": 4
 }
+
+### Atualizar um usuario
+PATCH {{baseUrl}}/usuarios/3
+Content-Type: application/json
+
+{
+    "gestorId": 4
+}
+
+### Apagar um usuario
+DELETE {{baseUrl}}/usuarios/6

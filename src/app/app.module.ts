@@ -17,20 +17,14 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
       database: 'dash_melhorias',
       password: '12345678',
       autoLoadEntities: true,
-      synchronize: false //Sincroniza com o BD. Não deve ser usado em produção
+      synchronize: false,
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'better-sqlite3',
-    //   database: 'melhorias.sqlite',
-    //   autoLoadEntities: true,
-    //   synchronize: false, //Sincroniza com o BD. Não deve ser usado em produção
-    // }),
     BranchModule,
     ProjetoModule,
     TarefaModule,
-    UsuarioModule
+    UsuarioModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
