@@ -32,6 +32,10 @@ export class Projeto {
     @JoinColumn({ name: 'criado_por_id' })
     criadoPor!: Usuario; //ok
 
+    @ManyToOne(() => Usuario, usuario => usuario.projetos)
+    @JoinColumn({ name: 'gestor_id' })
+    gestor!: Usuario; //
+
     @OneToMany(() => Tarefa, tarefa => tarefa.projeto)
     tarefas?: Tarefa[] //ok
 

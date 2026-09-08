@@ -74,15 +74,16 @@ Content-Type: application/json
     "nome": "Thiago Roberto Andrade Aguiar",
     "email": "roberto.aguiar@grendene.com.br",
     "gestorId": 4
+    
 }
 
 ### Atualizar um usuario
-PATCH {{baseUrl}}/usuarios/3
+PATCH {{baseUrl}}/usuarios/10
 Content-Type: application/json
 
 {
-    "gestorId": 4
+    "gestorId": 100
 }
 
 ### Apagar um usuario
-DELETE {{baseUrl}}/usuarios/6
+DELETE {{baseUrl}}/usuarios/14

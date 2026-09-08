@@ -23,6 +23,10 @@ export class Usuario {
   @JoinColumn({ name: 'projetos' })
   projetos?: Projeto[];
 
+  @OneToMany(() => Projeto, (projeto) => projeto.gestor)
+  @JoinColumn({ name: 'projetos_geridos' })
+  projetosGeridos?: Projeto[];
+
   @ManyToOne(() => Usuario, (usuario) => usuario.subordinados, {
     nullable: true,
   })
