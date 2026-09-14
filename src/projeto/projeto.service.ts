@@ -27,6 +27,7 @@ export class ProjetoService {
   async create(createProjetoDto: CreateProjetoDto): Promise<Projeto> {
     const {
       criadoPorId,
+      gestorId,
       tarefas,
       ...dadosProjeto
     } = createProjetoDto;
@@ -34,13 +35,22 @@ export class ProjetoService {
     const usuario = await this.usuarioRepository.findOneBy({
       id: criadoPorId
     })
-
     if (!usuario) { this.throwNotFoundException('Usuário não encontrado') }
+
+    const gestor = await this.usuarioRepository.findOneBy({
+      id: gestorId
+    })
+    if (!gestor) { this.throwNotFoundException('Gestor não encontrado') }
+
+
 
 
     const projetoCriado = this.projetoRepository.create({
       criadoPor: {
         id: criadoPorId
+      },
+      gestor: {
+        id: gestorId
       },
       tarefas: tarefas,
       ...dadosProjeto
@@ -57,6 +67,7 @@ export class ProjetoService {
     const projetoRetornado = await this.projetoRepository.findOneOrFail({
       relations: {
         criadoPor: true,
+        gestor: true,
         tarefas: true
       },
       where: {
@@ -72,6 +83,7 @@ export class ProjetoService {
     return this.projetoRepository.find({
       relations: {
         criadoPor: true,
+        gestor: true,
         tarefas: true
       },
       select: {
@@ -84,6 +96,7 @@ export class ProjetoService {
         orcamento: true,
         prioridade: true,
         criadoPor: true,
+        gestor: true,
         tarefas: true,
         createdAt: true,
         updatedAt: true
@@ -110,8 +123,9 @@ export class ProjetoService {
 
   async update(id: number, updateProjetoDto: UpdateProjetoDto) {
     const {
-      tarefas = updateProjetoDto.tarefas,
+      tarefas,
       criadoPorId,
+      gestorId,
       ...dadosProjeto
     } = updateProjetoDto;
 
@@ -125,10 +139,21 @@ export class ProjetoService {
       throw new NotFoundException('Usuário não encontrado');
     }
 
+    const gestor = await this.usuarioRepository.findOne({
+      where: {
+        id: gestorId
+      }
+    });
+
+    if (!gestor) {
+      throw new NotFoundException('Gestor não encontrado');
+    }
+
     const updatedProjeto = await this.projetoRepository.preload({
       id,
       ...dadosProjeto,
-      criadoPor: usuario
+      criadoPor: usuario,
+      gestor: gestor
     });
 
     if (!updatedProjeto) {
@@ -147,6 +172,7 @@ export class ProjetoService {
       },
       relations: {
         criadoPor: true,
+        gestor: true,
         tarefas: true
       },
       select: {
@@ -159,6 +185,7 @@ export class ProjetoService {
         orcamento: true,
         prioridade: true,
         criadoPor: true,
+        gestor: true,
         tarefas: true,
         createdAt: true,
         updatedAt: true

@@ -44,6 +44,10 @@ export class CreateProjetoDto {
     @IsNotEmpty()
     readonly criadoPorId!: number
 
+    @IsInt()
+    @IsNotEmpty()
+    readonly gestorId!: number
+
     @IsOptional()
     @IsArray()
     @ValidateNested({ each: true })

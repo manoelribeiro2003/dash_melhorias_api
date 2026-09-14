@@ -13,6 +13,7 @@ Content-Type: application/json
 {
     "nome": "Projeto para ser atualizado"
     ,"criadoPorId": 1
+    ,"gestorId" : 15
     ,"categoria": "RPA"
     ,"dataInicio": "2026-12-31"
     ,"dataTermino": "2027-12-31"
@@ -38,22 +39,28 @@ Content-Type: application/json
     ]
 }
 ### Atualizar um projeto
-PATCH {{baseUrl}}/projetos/156
+PATCH {{baseUrl}}/projetos/11
 Content-Type: application/json
 
 {
     "nome": "10000 PROJETO COM NOME ATUALIZADO",
     "orcamento": "555,00",
+    "criadoPorId": 4,
+    "gestorId": 15,
     "tarefas": [
         {
             "id": 323,
-            "nome": "NOVA Tarefa de projeto de prioridade",
+            "nome": "3 NOVA Tarefa de projeto de prioridade",
+            "ordem": 1
+        },
+        {
+            "nome": "2 NOVA Tarefa de projeto de prioridade",
             "ordem": 2
         }
     ]
 }
 ### Apagar um projeto
-DELETE {{baseUrl}}/projetos/146
+DELETE {{baseUrl}}/projetos/9
 
 
 
