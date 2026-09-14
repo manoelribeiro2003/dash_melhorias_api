@@ -72,7 +72,7 @@ export class UsuarioService {
       const novoUsuario: Usuario = this.usuarioRepository.create({
         nome: createUsuarioDto.nome,
         email: createUsuarioDto.email,
-        gestor: null
+        gestor: null,
       });
 
       return await this.usuarioRepository.save(novoUsuario);
@@ -95,6 +95,29 @@ export class UsuarioService {
         nome: usuario.gestor?.nome,
       },
     }));
+  }
+
+  async findAllGestores() {
+    const usuarios = await this.usuarioRepository.find({
+      relations: {
+        gestor: true,
+      },
+    });
+
+    const gestores = new Map(
+      usuarios
+        .filter((usuario) => usuario.gestor)
+        .map((usuario) => [
+          usuario.gestor!.id,
+          {
+            id: usuario.gestor!.id,
+            nome: usuario.gestor!.nome,
+            email: usuario.gestor!.email,
+          },
+        ]),
+    );
+
+    return [...gestores.values()];
   }
 
   async findOne(id: number): Promise<Usuario> {

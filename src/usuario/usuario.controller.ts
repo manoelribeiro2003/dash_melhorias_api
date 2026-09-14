@@ -17,6 +17,11 @@ export class UsuarioController {
     return this.usuarioService.findAll();
   }
 
+  @Get('gestores')
+  findAllGestores() {
+    return this.usuarioService.findAllGestores();
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usuarioService.findOne(id);
