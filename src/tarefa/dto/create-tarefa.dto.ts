@@ -15,6 +15,10 @@ export class CreateTarefaDto {
     readonly concluido?: boolean;
 
     @IsOptional()
+    @IsString()
+    readonly status?: string;
+
+    @IsOptional()
     @Type(() => Date)
     @IsDate()
     @IsNotEmpty()

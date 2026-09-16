@@ -1,34 +1,45 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTarefaDto } from './dto/create-tarefa.dto';
 import { UpdateTarefaDto } from './dto/update-tarefa.dto';
 import { Tarefa } from './entities/tarefa.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Projeto } from 'src/projeto/entities/projeto.entity';
+import { StatusTasks } from '../enums/status.enum';
 
 @Injectable()
 export class TarefaService {
-
   constructor(
-    @InjectRepository(Tarefa) private readonly tarefaRepository: Repository<Tarefa>,
-    @InjectRepository(Projeto) private readonly projetoRepository: Repository<Projeto>
-  ) { }
+    @InjectRepository(Tarefa)
+    private readonly tarefaRepository: Repository<Tarefa>,
+    @InjectRepository(Projeto)
+    private readonly projetoRepository: Repository<Projeto>,
+  ) {}
 
   throwConflictException(message?: string): never {
-    throw new ConflictException(message ? message : 'Tarefa já cadastrada')
+    throw new ConflictException(message ? message : 'Tarefa já cadastrada');
   }
 
   throwNotFoundException(message?: string): never {
-    throw new NotFoundException(message ? message : 'Tarefa não encontrada')
+    throw new NotFoundException(message ? message : 'Tarefa não encontrada');
   }
 
-  async createMany(projetoId: number, createTarefaDto: CreateTarefaDto[]): Promise<Tarefa[]> {
+  async createMany(
+    projetoId: number,
+    createTarefaDto: CreateTarefaDto[],
+  ): Promise<Tarefa[]> {
+    const projeto = await this.projetoRepository.findOneBy({ id: projetoId });
 
-    const projeto = await this.projetoRepository.findOneBy({ id: projetoId })
+    if (!projeto) {
+      this.throwNotFoundException('Projeto nao encontrado');
+    }
 
-    if (!projeto) { this.throwNotFoundException('Projeto nao encontrado') }
-
-    const tarefas = createTarefaDto.map(tarefa => (
+    const tarefas = createTarefaDto.map((tarefa) =>
       this.tarefaRepository.create({
         ...tarefa,
         nome: tarefa.nome,
@@ -36,26 +47,44 @@ export class TarefaService {
         projeto: projeto,
         dataInicio: tarefa.dataInicio,
         dataTermino: tarefa.dataTermino,
-      })
-    ))
+      }),
+    );
 
-    return await this.tarefaRepository.save(tarefas)
-
+    return await this.tarefaRepository.save(tarefas);
   }
 
   async findAll(): Promise<Tarefa[]> {
-    return await this.tarefaRepository.find()
+    return await this.tarefaRepository.find();
   }
 
   async findOne(id: number): Promise<Tarefa> {
-    const tarefa = await this.tarefaRepository.findOneBy({ id })
+    const tarefa = await this.tarefaRepository.findOneBy({ id });
 
-    if (!tarefa) { this.throwNotFoundException() }
+    if (!tarefa) {
+      this.throwNotFoundException();
+    }
 
     return tarefa;
   }
 
-  async updateMany(projetoId: number, tarefasDto: UpdateTarefaDto[]): Promise<Tarefa[]> {
+  async updateMany(
+    projetoId: number,
+    tarefasDto: UpdateTarefaDto[],
+  ): Promise<Tarefa[]> {
+    
+    const statusValidos = Object.values(StatusTasks);
+
+    const statusInvalido = tarefasDto.find(
+      (tarefa) =>
+        tarefa.status !== undefined &&
+        !statusValidos.includes(tarefa.status as StatusTasks),
+    );
+
+    if (statusInvalido) {
+      throw new BadRequestException(
+        `Status inválido: ${statusInvalido.status}`,
+      );
+    }
 
     const tarefasBanco = await this.tarefaRepository.find({
       where: {
@@ -66,18 +95,18 @@ export class TarefaService {
     });
 
     const idsPayload = tarefasDto
-      .filter(t => t.id !== undefined)
-      .map(t => t.id!);
+      .filter((t) => t.id !== undefined)
+      .map((t) => t.id!);
 
     const tarefasParaRemover = tarefasBanco.filter(
-      t => !idsPayload.includes(t.id),
+      (t) => !idsPayload.includes(t.id),
     );
 
     if (tarefasParaRemover.length) {
       await this.tarefaRepository.remove(tarefasParaRemover);
     }
 
-    const tarefas = tarefasDto.map(tarefa =>
+    const tarefas = tarefasDto.map((tarefa) =>
       this.tarefaRepository.create({
         ...tarefa,
         projeto: {
@@ -90,11 +119,10 @@ export class TarefaService {
   }
 
   async remove(id: number): Promise<Tarefa> {
-    const tarefa = await this.findOne(id)
+    const tarefa = await this.findOne(id);
 
-    await this.tarefaRepository.remove(tarefa)
+    await this.tarefaRepository.remove(tarefa);
 
-    return tarefa
-
+    return tarefa;
   }
 }

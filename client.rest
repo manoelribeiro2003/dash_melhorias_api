@@ -51,13 +51,10 @@ Content-Type: application/json
     "gestorId": 15,
     "tarefas": [
         {
-            "id": 323,
-            "nome": "3 NOVA Tarefa de projeto de prioridade",
-            "ordem": 1
-        },
-        {
+            "id": 70,
             "nome": "2 NOVA Tarefa de projeto de prioridade",
-            "ordem": 2
+            "ordem": 1,
+            "status": "Em andamento"
         }
     ]
 }
