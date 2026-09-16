@@ -19,6 +19,7 @@ Content-Type: application/json
     ,"dataTermino": "2027-12-31"
     ,"dataTermino": "2027-12-31"
     ,"orcamento": "1000,00"
+    ,"ganhoPar": "12,12"
     ,"prioridade": true
     ,"tarefas": [
         {
@@ -39,12 +40,13 @@ Content-Type: application/json
     ]
 }
 ### Atualizar um projeto
-PATCH {{baseUrl}}/projetos/11
+PATCH {{baseUrl}}/projetos/20
 Content-Type: application/json
 
 {
     "nome": "10000 PROJETO COM NOME ATUALIZADO",
     "orcamento": "555,00",
+    "ganhoPar": "555,00",
     "criadoPorId": 4,
     "gestorId": 15,
     "tarefas": [

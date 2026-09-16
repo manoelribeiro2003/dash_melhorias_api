@@ -36,6 +36,11 @@ export class CreateProjetoDto {
     readonly orcamento?: string
 
     @IsOptional()
+    @IsString()
+    @IsNotEmpty()
+    readonly ganhoPar?: string
+
+    @IsOptional()
     @IsBoolean()
     @IsNotEmpty()
     readonly prioridade?: boolean

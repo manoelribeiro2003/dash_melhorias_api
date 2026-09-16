@@ -26,15 +26,19 @@ npm install
 ```bash
 npm run build
 ```
-### 4. Executar migrations
+### 4. Gerar migrations
+```bash
+npx typeorm-ts-node-commonjs migration:generate src/app/migrations/AdicionarPrioridadeProjeto -d src/app/data-source.ts
+```
+### 5. Executar migrations
 ```bash
 npx typeorm-ts-node-commonjs migration:run -d src/app/data-source.ts
 ```
-### 5. Verificar migrations
+### 6. Verificar migrations
 ```bash
 npx typeorm-ts-node-commonjs migration:show -d src/app/data-source.ts
 ```
-### 6. Reverter a ultima migration executada
+### 7. Reverter a ultima migration executada
 ```bash
 npx typeorm-ts-node-commonjs migration:revert -d src/app/data-source.ts
 ```

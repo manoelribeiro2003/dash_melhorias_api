@@ -25,6 +25,9 @@ export class Projeto {
     @Column({ type: 'varchar' , nullable: true})
     orcamento?: string //ok 
 
+    @Column({ type: 'varchar' , nullable: true})
+    ganhoPar?: string //ok 
+
     @Column({ type: 'boolean', default: false})
     prioridade?: boolean //ok
 
