@@ -25,7 +25,8 @@ Content-Type: application/json
         {
             "ordem": 1,
             "nome": "1 Tarefa de projeto de prioridade",
-            "concluido": false
+            "concluido": false,
+            "status": "Concluída"
         },
         {
             "ordem": 2,
@@ -59,7 +60,7 @@ Content-Type: application/json
     ]
 }
 ### Apagar um projeto
-DELETE {{baseUrl}}/projetos/9
+DELETE {{baseUrl}}/projetos/21
 
 
 

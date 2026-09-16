@@ -33,6 +33,19 @@ export class TarefaService {
     projetoId: number,
     createTarefaDto: CreateTarefaDto[],
   ): Promise<Tarefa[]> {
+
+    const statusValidos = Object.values(StatusTasks);
+    const statusInvalido = createTarefaDto.find(
+      (tarefa) =>
+        tarefa.status !== undefined &&
+        !statusValidos.includes(tarefa.status as StatusTasks),
+    );
+    if (statusInvalido) {
+      throw new BadRequestException(
+        `Status inválido: ${statusInvalido.status}`,
+      );
+    }
+
     const projeto = await this.projetoRepository.findOneBy({ id: projetoId });
 
     if (!projeto) {
@@ -71,7 +84,6 @@ export class TarefaService {
     projetoId: number,
     tarefasDto: UpdateTarefaDto[],
   ): Promise<Tarefa[]> {
-    
     const statusValidos = Object.values(StatusTasks);
 
     const statusInvalido = tarefasDto.find(
