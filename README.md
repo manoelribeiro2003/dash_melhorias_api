@@ -28,7 +28,7 @@ npm run build
 ```
 ### 4. Gerar migrations
 ```bash
-npx typeorm-ts-node-commonjs migration:generate src/app/migrations/AdicionarPrioridadeProjeto -d src/app/data-source.ts
+npx typeorm-ts-node-commonjs migration:generate src/migrations/AdicionarPrioridadeProjeto -d src/app/data-source.ts
 ```
 ### 5. Executar migrations
 ```bash

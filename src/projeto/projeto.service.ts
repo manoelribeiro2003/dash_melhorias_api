@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProjetoDto } from './dto/create-projeto.dto';
 import { UpdateProjetoDto } from './dto/update-projeto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,74 +13,72 @@ import { Projeto } from './entities/projeto.entity';
 
 @Injectable()
 export class ProjetoService {
-
   constructor(
-    @InjectRepository(Projeto) private readonly projetoRepository: Repository<Projeto>,
-    @InjectRepository(Usuario) private readonly usuarioRepository: Repository<Usuario>,
-    private readonly tarefaService: TarefaService
-  ) { }
+    @InjectRepository(Projeto)
+    private readonly projetoRepository: Repository<Projeto>,
+    @InjectRepository(Usuario)
+    private readonly usuarioRepository: Repository<Usuario>,
+    private readonly tarefaService: TarefaService,
+  ) {}
 
   throwConflictException(message?: string): never {
-    throw new ConflictException(message ? message : 'Projeto já cadastrado')
+    throw new ConflictException(message ? message : 'Projeto já cadastrado');
   }
 
   throwNotFoundException(message?: string): never {
-    throw new NotFoundException(message ? message : 'Projeto não encontrado')
+    throw new NotFoundException(message ? message : 'Projeto não encontrado');
   }
 
   async create(createProjetoDto: CreateProjetoDto): Promise<Projeto> {
-    const {
-      criadoPorId,
-      gestorId,
-      tarefas,
-      ...dadosProjeto
-    } = createProjetoDto;
+    const { criadoPorId, gestorId, tarefas, ...dadosProjeto } =
+      createProjetoDto;
 
     const usuario = await this.usuarioRepository.findOneBy({
-      id: criadoPorId
-    })
-    if (!usuario) { this.throwNotFoundException('Usuário não encontrado') }
+      id: criadoPorId,
+    });
+    if (!usuario) {
+      this.throwNotFoundException('Usuário não encontrado');
+    }
 
     const gestor = await this.usuarioRepository.findOneBy({
-      id: gestorId
-    })
-    if (!gestor) { this.throwNotFoundException('Gestor não encontrado') }
-
-
-
+      id: gestorId,
+    });
+    if (!gestor) {
+      this.throwNotFoundException('Gestor não encontrado');
+    }
 
     const projetoCriado = this.projetoRepository.create({
       criadoPor: {
-        id: criadoPorId
+        id: criadoPorId,
       },
       gestor: {
-        id: gestorId
+        id: gestorId,
       },
       tarefas: tarefas,
-      ...dadosProjeto
-    })
+      ...dadosProjeto,
+    });
 
-    const projetoSalvo = await this.projetoRepository.save(projetoCriado)
+    const projetoSalvo = await this.projetoRepository.save(projetoCriado);
 
     if (createProjetoDto.tarefas?.length) {
       await this.tarefaService.createMany(
-        projetoSalvo.id, createProjetoDto.tarefas
-      )
+        projetoSalvo.id,
+        createProjetoDto.tarefas,
+      );
     }
 
     const projetoRetornado = await this.projetoRepository.findOneOrFail({
       relations: {
         criadoPor: true,
         gestor: true,
-        tarefas: true
+        tarefas: true,
       },
       where: {
-        id: projetoSalvo.id
-      }
-    })
+        id: projetoSalvo.id,
+      },
+    });
 
     return projetoRetornado;
-
   }
 
   async findAll(): Promise<Projeto[]> {
@@ -84,7 +86,7 @@ export class ProjetoService {
       relations: {
         criadoPor: true,
         gestor: true,
-        tarefas: true
+        tarefas: true,
       },
       select: {
         id: true,
@@ -100,14 +102,14 @@ export class ProjetoService {
         gestor: true,
         tarefas: true,
         createdAt: true,
-        updatedAt: true
+        updatedAt: true,
       },
       order: {
         id: 'ASC',
         tarefas: {
-          ordem: 'ASC'
-        }
-      }
+          ordem: 'ASC',
+        },
+      },
     });
   }
 
@@ -115,25 +117,23 @@ export class ProjetoService {
     const projeto = await this.projetoRepository.findOne({
       relations: { criadoPor: true, tarefas: true },
       where: { id: id },
-    })
+    });
 
-    if (!projeto) { this.throwNotFoundException() }
+    if (!projeto) {
+      this.throwNotFoundException();
+    }
 
-    return projeto
+    return projeto;
   }
 
   async update(id: number, updateProjetoDto: UpdateProjetoDto) {
-    const {
-      tarefas,
-      criadoPorId,
-      gestorId,
-      ...dadosProjeto
-    } = updateProjetoDto;
+    const { tarefas, criadoPorId, gestorId, ...dadosProjeto } =
+      updateProjetoDto;
 
     const usuario = await this.usuarioRepository.findOne({
       where: {
-        id: criadoPorId
-      }
+        id: criadoPorId,
+      },
     });
 
     if (!usuario) {
@@ -142,8 +142,8 @@ export class ProjetoService {
 
     const gestor = await this.usuarioRepository.findOne({
       where: {
-        id: gestorId
-      }
+        id: gestorId,
+      },
     });
 
     if (!gestor) {
@@ -154,7 +154,7 @@ export class ProjetoService {
       id,
       ...dadosProjeto,
       criadoPor: usuario,
-      gestor: gestor
+      gestor: gestor,
     });
 
     if (!updatedProjeto) {
@@ -169,12 +169,12 @@ export class ProjetoService {
 
     return await this.projetoRepository.findOne({
       where: {
-        id
+        id,
       },
       relations: {
         criadoPor: true,
         gestor: true,
-        tarefas: true
+        tarefas: true,
       },
       select: {
         id: true,
@@ -190,31 +190,29 @@ export class ProjetoService {
         gestor: true,
         tarefas: true,
         createdAt: true,
-        updatedAt: true
+        updatedAt: true,
       },
       order: {
         tarefas: {
-          ordem: 'ASC'
-        }
-      }
+          ordem: 'ASC',
+        },
+      },
     });
   }
 
   async remove(id: number): Promise<Projeto> {
-
     let projeto = await this.projetoRepository.findOneBy({ id });
 
     if (!projeto) {
       this.throwNotFoundException();
     }
 
-    const projetoExcluido = await this.projetoRepository.remove(projeto)
+    const projetoExcluido = await this.projetoRepository.remove(projeto);
 
     projeto = {
       ...projetoExcluido,
       id: id,
     };
-    
 
     return projeto;
   }

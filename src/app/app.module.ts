@@ -6,6 +6,7 @@ import { BranchModule } from 'src/branch/branch.module';
 import { ProjetoModule } from 'src/projeto/projeto.module';
 import { TarefaModule } from 'src/tarefa/tarefa.module';
 import { UsuarioModule } from 'src/usuario/usuario.module';
+import { HistoricoModule } from 'src/historico/historico.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsuarioModule } from 'src/usuario/usuario.module';
     ProjetoModule,
     TarefaModule,
     UsuarioModule,
+    HistoricoModule
   ],
   controllers: [AppController],
   providers: [AppService],

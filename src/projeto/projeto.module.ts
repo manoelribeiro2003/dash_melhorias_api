@@ -13,6 +13,6 @@ import { TarefaModule } from 'src/tarefa/tarefa.module';
   ],
   controllers: [ProjetoController],
   providers: [ProjetoService],
-  exports: [ProjetoModule]
+  exports: [ProjetoService]
 })
 export class ProjetoModule {}

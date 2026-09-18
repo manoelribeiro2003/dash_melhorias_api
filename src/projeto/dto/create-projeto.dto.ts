@@ -1,7 +1,6 @@
 import { Type } from "class-transformer";
 import { IsArray, IsBoolean, IsDate, IsInt, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
 import { CreateTarefaDto } from "src/tarefa/dto/create-tarefa.dto";
-import { Usuario } from "src/usuario/entities/usuario.entity";
 
 export class CreateProjetoDto {
     @IsString()

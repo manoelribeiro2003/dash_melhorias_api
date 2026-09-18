@@ -66,8 +66,44 @@ DELETE {{baseUrl}}/projetos/21
 
 
 
-# --------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------------------------
 ### Listar todos os usuarios
+GET {{baseUrl}}/usuarios/
+
+### Listar todos os gestores
+GET {{baseUrl}}/usuarios/gestores
+
+### Listar um usuario
+GET {{baseUrl}}/usuarios/3
+
+### Criar um usuario
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+    "nome": "Thiago Roberto Andrade Aguiar",
+    "email": "roberto.aguiar@grendene.com.br",
+    "gestorId": 4
+    
+}
+
+### Atualizar um usuario
+PATCH {{baseUrl}}/usuarios/10
+Content-Type: application/json
+
+{
+    "gestorId": 100
+}
+
+### Apagar um usuario
+DELETE {{baseUrl}}/usuarios/14
+
+
+
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------
+### Listar historico
 GET {{baseUrl}}/usuarios/
 
 ### Listar todos os gestores

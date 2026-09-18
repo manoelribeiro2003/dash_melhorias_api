@@ -1,0 +1,132 @@
+@baseUrl = http://localhost:3000
+@projetoId = 26
+@tarefaId = 1
+@criadoPorId = 2
+@atualizadoPorId = 2
+@gestorId = 4
+
+### ==================================================
+### HISTÓRICO DE PROJETOS
+### ==================================================
+
+### Criar histórico de um projeto
+POST {{baseUrl}}/historico/projeto
+Content-Type: application/json
+
+{
+  "projetoId": {{projetoId}},
+  "criadoPorId": {{criadoPorId}},
+  "atualizadoPorId": {{atualizadoPorId}},
+  "gestorId": {{gestorId}},
+  "nome": "Projeto de Automação",
+  "categoria": "RPA",
+  "status": "Em Andamento",
+  "dataInicio": "2026-09-18",
+  "dataTermino": "2026-10-30",
+  "orcamento": "15000.00",
+  "ganhoPar": "123.4567",
+  "prioridade": true
+}
+
+### Buscar histórico de um projeto
+GET {{baseUrl}}/historico/projeto/{{projetoId}}
+
+
+### ==================================================
+### HISTÓRICO DE TAREFAS
+### ==================================================
+
+### Criar histórico de várias tarefas
+POST {{baseUrl}}/historico/tarefas
+Content-Type: application/json
+
+[
+  {
+    "projetoId": {{projetoId}},
+    "tarefaId": 1,
+    "criadoPorId": {{criadoPorId}},
+    "atualizadoPorId": {{atualizadoPorId}},
+    "nome": "Criar estrutura do projeto",
+    "ordem": 1,
+    "dataInicio": "2026-09-18",
+    "dataTermino": "2026-09-19",
+    "status": "Não iniciado"
+  },
+  {
+    "projetoId": {{projetoId}},
+    "tarefaId": 2,
+    "criadoPorId": {{criadoPorId}},
+    "atualizadoPorId": {{atualizadoPorId}},
+    "nome": "Configurar banco de dados",
+    "ordem": 2,
+    "dataInicio": "2026-09-20",
+    "dataTermino": "2026-09-22",
+    "status": "Não iniciado"
+  },
+  {
+    "projetoId": {{projetoId}},
+    "tarefaId": 3,
+    "criadoPorId": {{criadoPorId}},
+    "atualizadoPorId": {{atualizadoPorId}},
+    "nome": "Desenvolver telas",
+    "ordem": 3,
+    "dataInicio": "2026-09-23",
+    "dataTermino": "2026-09-26",
+    "status": "Não iniciado"
+  }
+]
+
+### Buscar histórico de uma tarefa
+GET {{baseUrl}}/historico/tarefa/{{tarefaId}}
+
+
+### ==================================================
+### SIMULAR EDIÇÃO DE UMA TAREFA
+### ==================================================
+
+### Criar nova snapshot da tarefa 1 após edição
+POST {{baseUrl}}/historico/tarefas
+Content-Type: application/json
+
+[
+  {
+    "projetoId": {{projetoId}},
+    "tarefaId": 1,
+    "criadoPorId": {{criadoPorId}},
+    "atualizadoPorId": {{atualizadoPorId}},
+    "nome": "Criar estrutura do projeto - Atualizada",
+    "ordem": 1,
+    "dataInicio": "2026-09-18",
+    "dataTermino": "2026-09-20",
+    "status": "Em Andamento"
+  }
+]
+
+### Buscar novamente o histórico da tarefa 1
+GET {{baseUrl}}/historico/tarefa/1
+
+
+### ==================================================
+### SIMULAR EXCLUSÃO DE UMA TAREFA
+### ==================================================
+
+### Criar snapshot final antes da exclusão
+POST {{baseUrl}}/historico/tarefas
+Content-Type: application/json
+
+[
+  {
+    "projetoId": {{projetoId}},
+    "tarefaId": 1,
+    "criadoPorId": {{criadoPorId}},
+    "atualizadoPorId": {{atualizadoPorId}},
+    "nome": "Criar estrutura do projeto - Antes da exclusão",
+    "ordem": 1,
+    "dataInicio": "2026-09-18",
+    "dataTermino": "2026-09-20",
+    "status": "Excluída"
+  }
+]
+
+### Consultar o histórico preservado
+GET {{baseUrl}}/historico/tarefa/1
