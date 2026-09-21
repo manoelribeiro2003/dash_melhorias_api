@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateHistoricoTarefaDto } from './dto/create-historico-tarefa.dto';
 import { CreateHistoricoProjetoDto } from './dto/create-historico-projeto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,19 +12,25 @@ import { HistoricoProjeto } from './entities/historico-projeto.entity';
 import { HistoricoTarefa } from './entities/historico-tarefa.entity';
 import { ProjetoService } from 'src/projeto/projeto.service';
 import { UsuarioService } from 'src/usuario/usuario.service';
+import { TarefaService } from 'src/tarefa/tarefa.service';
 
 @Injectable()
 export class HistoricoService {
   constructor(
     @InjectRepository(HistoricoTarefa)
     private readonly tarefaHistoricoRepository: Repository<HistoricoTarefa>,
+
     @InjectRepository(HistoricoProjeto)
     private readonly projetoHistoricoRepository: Repository<HistoricoProjeto>,
 
+    @Inject(forwardRef(() => ProjetoService))
     private readonly projetoService: ProjetoService,
+    @Inject(forwardRef(() => ProjetoService))
+    private readonly tarefaService: TarefaService,
+
     private readonly usuarioService: UsuarioService,
   ) {}
-
+  @InjectRepository(HistoricoTarefa)
   throwNotFoundException(tipo: 'projeto' | 'tarefa' | 'usuario'): never {
     const mensagens = {
       projeto: 'Projeto não encontrado',
@@ -50,11 +61,13 @@ export class HistoricoService {
     ]);
 
     const snapshotProjeto = this.projetoHistoricoRepository.create({
+      ...dadosHistoricoProjeto,
       projetoId,
       criadoPorId: criadoPor.id,
       atualizadoPorId: atualizadoPor.id,
       gestorId: gestor.id,
-      ...dadosHistoricoProjeto,
+      ganhoPar: this.normalizarDecimal(dadosHistoricoProjeto.ganhoPar),
+      orcamento: this.normalizarDecimal(dadosHistoricoProjeto.orcamento),
     });
 
     return await this.projetoHistoricoRepository.save(snapshotProjeto);
@@ -130,5 +143,13 @@ export class HistoricoService {
         createdAt: 'DESC',
       },
     });
+  }
+
+  private normalizarDecimal(valor: string | null | undefined): string | null {
+    if (valor === null || valor === undefined || valor === '') {
+      return null;
+    }
+
+    return valor.replace(',', '.');
   }
 }

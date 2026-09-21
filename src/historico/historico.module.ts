@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { HistoricoService } from './historico.service';
 import { HistoricoController } from './historico.controller';
 import { TarefaModule } from 'src/tarefa/tarefa.module';
@@ -12,12 +12,12 @@ import { HistoricoTarefa } from './entities/historico-tarefa.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Usuario, HistoricoProjeto, HistoricoTarefa]),
-    TarefaModule,
-    ProjetoModule,
-    UsuarioModule
+    forwardRef(() => ProjetoModule),
+    forwardRef(() => TarefaModule),
+    UsuarioModule,
   ],
   controllers: [HistoricoController],
   providers: [HistoricoService],
-  exports: [HistoricoService]
+  exports: [HistoricoService],
 })
 export class HistoricoModule {}

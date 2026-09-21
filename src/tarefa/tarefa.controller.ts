@@ -11,7 +11,7 @@ export class TarefaController {
     @Body() createTarefaDto: CreateTarefaDto[],
     @Param('projetoId', ParseIntPipe) projetoId: number,
   ) {
-    return this.tarefaService.createMany(projetoId, createTarefaDto);
+    // return this.tarefaService.createMany(projetoId, createTarefaDto);
   }
 
   // @Get()
@@ -26,6 +26,6 @@ export class TarefaController {
 
   // @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
-    return this.tarefaService.remove(id);
+    // return this.tarefaService.remove(id);
   }
 }

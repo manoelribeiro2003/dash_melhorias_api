@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Matches,
 } from 'class-validator';
 
 export class CreateHistoricoProjetoDto {
@@ -47,11 +48,19 @@ export class CreateHistoricoProjetoDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
+  @Matches(/^\d+(?:\.\d{1,2})?$/, {
+    message:
+      'orcamento deve ser um número válido usando ponto como separador decimal',
+  })
   readonly orcamento?: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
+  @Matches(/^\d+(?:\.\d{1,4})?$/, {
+    message:
+      'ganhoPar deve ser um número válido com até 4 casas decimais usando ponto como separador',
+  })
   readonly ganhoPar?: string;
 
   @IsOptional()

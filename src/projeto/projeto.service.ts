@@ -1,5 +1,7 @@
 import {
   ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,14 +12,21 @@ import { Repository } from 'typeorm';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { TarefaService } from 'src/tarefa/tarefa.service';
 import { Projeto } from './entities/projeto.entity';
+import { HistoricoService } from 'src/historico/historico.service';
+import { CreateHistoricoProjetoDto } from 'src/historico/dto/create-historico-projeto.dto';
 
 @Injectable()
 export class ProjetoService {
   constructor(
     @InjectRepository(Projeto)
     private readonly projetoRepository: Repository<Projeto>,
+
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
+
+    @Inject(forwardRef(() => HistoricoService))
+    private readonly historicoService: HistoricoService,
+
     private readonly tarefaService: TarefaService,
   ) {}
 
@@ -64,6 +73,7 @@ export class ProjetoService {
       await this.tarefaService.createMany(
         projetoSalvo.id,
         createProjetoDto.tarefas,
+        criadoPorId,
       );
     }
 
@@ -77,6 +87,24 @@ export class ProjetoService {
         id: projetoSalvo.id,
       },
     });
+
+    const createHistoricoProjetoDto: CreateHistoricoProjetoDto = {
+      gestorId: gestorId,
+      criadoPorId: criadoPorId,
+      atualizadoPorId: criadoPorId,
+      nome: dadosProjeto.nome,
+      projetoId: projetoRetornado.id,
+      categoria: dadosProjeto.categoria,
+      dataInicio: dadosProjeto.dataInicio,
+      dataTermino: dadosProjeto.dataTermino,
+      excluido: false,
+      ganhoPar: dadosProjeto.ganhoPar,
+      orcamento: dadosProjeto.orcamento,
+      prioridade: dadosProjeto.prioridade,
+      status: dadosProjeto.status,
+    };
+
+    this.historicoService.createHistoricoProjeto(createHistoricoProjetoDto);
 
     return projetoRetornado;
   }
@@ -127,7 +155,7 @@ export class ProjetoService {
   }
 
   async update(id: number, updateProjetoDto: UpdateProjetoDto) {
-    const { tarefas, criadoPorId, gestorId, ...dadosProjeto } =
+    const { tarefas, criadoPorId, atualizadoPorId, gestorId, ...dadosProjeto } =
       updateProjetoDto;
 
     const usuario = await this.usuarioRepository.findOne({
@@ -162,10 +190,33 @@ export class ProjetoService {
     }
 
     if (tarefas?.length) {
-      await this.tarefaService.updateMany(id, tarefas);
+      await this.tarefaService.updateMany(
+        id,
+        tarefas,
+        criadoPorId!,
+        atualizadoPorId,
+      );
     }
 
     await this.projetoRepository.save(updatedProjeto);
+
+    const createHistoricoProjetoDto: CreateHistoricoProjetoDto = {
+      gestorId: gestorId!,
+      criadoPorId: criadoPorId!,
+      atualizadoPorId: atualizadoPorId!,
+      projetoId: updatedProjeto.id,
+      nome: dadosProjeto.nome!,
+      categoria: dadosProjeto.categoria,
+      dataInicio: dadosProjeto.dataInicio,
+      dataTermino: dadosProjeto.dataTermino,
+      excluido: false,
+      ganhoPar: dadosProjeto.ganhoPar,
+      orcamento: dadosProjeto.orcamento,
+      prioridade: dadosProjeto.prioridade,
+      status: dadosProjeto.status,
+    };
+
+    this.historicoService.createHistoricoProjeto(createHistoricoProjetoDto);
 
     return await this.projetoRepository.findOne({
       where: {
@@ -201,19 +252,46 @@ export class ProjetoService {
   }
 
   async remove(id: number): Promise<Projeto> {
-    let projeto = await this.projetoRepository.findOneBy({ id });
+    const projeto = await this.projetoRepository.findOne({
+      where: { id },
+      relations: {
+        gestor: true,
+        criadoPor: true,
+      },
+    });
 
     if (!projeto) {
-      this.throwNotFoundException();
+      this.throwNotFoundException('Projeto não encontrado');
     }
+
+    const createHistoricoProjetoDto: CreateHistoricoProjetoDto = {
+      gestorId: projeto.gestor.id,
+      criadoPorId: projeto.criadoPor.id,
+      atualizadoPorId: projeto.criadoPor.id,
+      projetoId: projeto.id,
+      nome: projeto.nome,
+      categoria: projeto.categoria,
+      dataInicio: projeto.dataInicio,
+      dataTermino: projeto.dataTermino,
+      excluido: true,
+      ganhoPar: projeto.ganhoPar,
+      orcamento: projeto.orcamento,
+      prioridade: projeto.prioridade,
+      status: projeto.status,
+    };
+
+    console.log('DTO HISTÓRICO:', createHistoricoProjetoDto);
+
+    await this.historicoService.createHistoricoProjeto(
+      createHistoricoProjetoDto,
+    );
+
+    console.log('Histórico criado');
 
     const projetoExcluido = await this.projetoRepository.remove(projeto);
 
-    projeto = {
-      ...projetoExcluido,
-      id: id,
-    };
+    console.log('Projeto excluído');
 
-    return projeto;
+    return projetoExcluido;
   }
 }

@@ -15,11 +15,12 @@ Content-Type: application/json
     ,"criadoPorId": 1
     ,"gestorId" : 15
     ,"categoria": "RPA"
+    ,"status": "Em andamento"
     ,"dataInicio": "2026-12-31"
     ,"dataTermino": "2027-12-31"
     ,"dataTermino": "2027-12-31"
-    ,"orcamento": "1000,00"
-    ,"ganhoPar": "12,12"
+    ,"orcamento": "1000.00"
+    ,"ganhoPar": "12.12"
     ,"prioridade": true
     ,"tarefas": [
         {
@@ -41,22 +42,27 @@ Content-Type: application/json
     ]
 }
 ### Atualizar um projeto
-PATCH {{baseUrl}}/projetos/20
+PATCH {{baseUrl}}/projetos/30
 Content-Type: application/json
 
 {
     "nome": "10000 PROJETO COM NOME ATUALIZADO",
-    "orcamento": "555,00",
+    "orcamento": "555.10",
     "ganhoPar": "555,00",
     "criadoPorId": 4,
+    "atualizadoPorId": 4,
     "gestorId": 15,
+    "categoria": "RPA",
     "tarefas": [
-        {
-            "id": 70,
-            "nome": "2 NOVA Tarefa de projeto de prioridade",
-            "ordem": 1,
-            "status": "Em andamento"
-        }
+    {
+        "id": 99,
+        "nome": "3 NOVA Tarefa de projeto de prioridade",
+        "ordem": 21,
+        "dataInicio": null,
+        "dataTermino": null,
+        "concluido": false,
+        "status": "Em andamento"
+    }
     ]
 }
 ### Apagar um projeto

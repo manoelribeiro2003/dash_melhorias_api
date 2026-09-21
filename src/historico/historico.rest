@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3000
-@projetoId = 26
-@tarefaId = 1
+@projetoId = 30
+@tarefaId = 17
 @criadoPorId = 2
 @atualizadoPorId = 2
 @gestorId = 4
@@ -77,7 +77,7 @@ Content-Type: application/json
 ]
 
 ### Buscar histórico de uma tarefa
-GET {{baseUrl}}/historico/tarefa/{{tarefaId}}
+GET {{baseUrl}}/historico/tarefa/50
 
 
 ### ==================================================
