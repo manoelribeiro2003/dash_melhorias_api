@@ -1,0 +1,151 @@
+@baseUrl = http://localhost:3000
+
+### Listar todos os projetos
+GET {{baseUrl}}/projetos/
+
+### Listar apenas um projeto
+GET {{baseUrl}}/projetos/25
+
+### Criar um projeto
+POST {{baseUrl}}/projetos/
+Content-Type: application/json
+
+{
+    "nome": "Otimização do Atendimento",
+    "categoria": "RPA",
+    "status": "Em Andamento",
+    "dataInicio": "2026-09-01",
+    "dataTermino": "2026-10-15",
+    "orcamento": "25000",
+    "prioridade": true,
+    "criadoPorId": 2,
+    "gestorId": 4,
+    "tarefas": [
+      {
+        "nome": "Mapear processo atual",
+        "ordem": 1,
+        "concluido": true,
+        "dataInicio": "2026-09-01",
+        "dataTermino": "2026-09-05"
+      },
+      {
+        "nome": "Desenvolver automação",
+        "ordem": 2,
+        "concluido": true,
+        "dataInicio": "2026-09-06",
+        "dataTermino": "2026-09-15"
+      },
+      {
+        "nome": "Testar automação",
+        "ordem": 3,
+        "concluido": false,
+        "dataInicio": "2026-09-16",
+        "dataTermino": "2026-09-20"
+      },
+      {
+        "nome": "Publicar solução",
+        "ordem": 4,
+        "concluido": false,
+        "dataInicio": "2026-10-06",
+        "dataTermino": "2026-10-15"
+      }
+    ]
+  }
+### Atualizar um projeto
+PATCH {{baseUrl}}/projetos/30
+Content-Type: application/json
+
+{
+    "nome": "10000 PROJETO COM NOME ATUALIZADO",
+    "orcamento": "555.10",
+    "ganhoPar": "555,00",
+    "criadoPorId": 4,
+    "atualizadoPorId": 4,
+    "gestorId": 15,
+    "categoria": "RPA",
+    "tarefas": [
+    {
+        "id": 99,
+        "nome": "3 NOVA Tarefa de projeto de prioridade",
+        "ordem": 21,
+        "dataInicio": null,
+        "dataTermino": null,
+        "concluido": false,
+        "status": "Em andamento"
+    }
+    ]
+}
+### Apagar um projeto
+DELETE {{baseUrl}}/projetos/21
+
+
+
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------
+### Listar todos os usuarios
+GET {{baseUrl}}/usuarios/
+
+### Listar todos os gestores
+GET {{baseUrl}}/usuarios/gestores
+
+### Listar um usuario
+GET {{baseUrl}}/usuarios/3
+
+### Criar um usuario
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+    "nome": "Thiago Roberto Andrade Aguiar",
+    "email": "roberto.aguiar@grendene.com.br",
+    "gestorId": 4
+    
+}
+
+### Atualizar um usuario
+PATCH {{baseUrl}}/usuarios/10
+Content-Type: application/json
+
+{
+    "gestorId": 100
+}
+
+### Apagar um usuario
+DELETE {{baseUrl}}/usuarios/14
+
+
+
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------
+### Listar historico
+GET {{baseUrl}}/usuarios/
+
+### Listar todos os gestores
+GET {{baseUrl}}/usuarios/gestores
+
+### Listar um usuario
+GET {{baseUrl}}/usuarios/3
+
+### Criar um usuario
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+    "nome": "Thiago Roberto Andrade Aguiar",
+    "email": "roberto.aguiar@grendene.com.br",
+    "gestorId": 4
+    
+}
+
+### Atualizar um usuario
+PATCH {{baseUrl}}/usuarios/10
+Content-Type: application/json
+
+{
+    "gestorId": 100
+}
+
+### Apagar um usuario
+DELETE {{baseUrl}}/usuarios/14
